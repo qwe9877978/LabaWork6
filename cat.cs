@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,15 +31,15 @@ namespace Laba6
         /// Создает экземпляр кота с указанным именем.
         /// </summary>
         /// <param name="name">Имя кота</param>
-        /// <exception cref="ArgumentException">Если имя пустое или содержит только пробелы.</exception>
+        /// <exception cref="ArgumentException">Если имя пустое.</exception>
         public Cat(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == null || name == "")
             {
                 throw new ArgumentException("Имя кота не может быть пустым");
             }
 
-            Name = name.Trim();
+            Name = name;
         }
 
         /// <inheritdoc/>
@@ -60,8 +60,13 @@ namespace Laba6
                 throw new ArgumentException("Количество мяуканий должно быть больше 0");
             }
 
-            string meows = string.Join("-", Enumerable.Repeat("мяу", n));
-            Console.WriteLine($"{Name}: {meows}!");
+            // Используем простой цикл вместо Enumerable.Repeat
+            string result = "мяу";
+            for (int i = 1; i < n; i++)
+            {
+                result = result + "-мяу";
+            }
+            Console.WriteLine($"{Name}: {result}!");
         }
     }
 
@@ -77,6 +82,11 @@ namespace Laba6
         /// Количество вызовов метода Meow.
         /// </summary>
         public int CallCount { get; private set; }
+
+        /// <summary>
+        /// Получает оригинальный объект, который мяукает.
+        /// </summary>
+        public T OriginalObject => _meowable;
 
         /// <summary>
         /// Создает обертку для подсчета вызовов.
@@ -156,30 +166,55 @@ namespace Laba6
         /// <summary>
         /// Запускает задание 1: создание кота и мяуканье.
         /// </summary>
-        public static void RunTask1()
+        /// <returns>Счетчик для созданного кота</returns>
+        public static MeowCounter<Cat> RunTask1()
         {
             Console.WriteLine("\n--- ЗАДАНИЕ 1.1: СОЗДАНИЕ КОТА И МЯУКАНЬЕ ---");
             Console.Write("Введите имя кота: ");
             string name = Console.ReadLine();
 
             Cat cat = new Cat(name);
+            MeowCounter<Cat> counter = new MeowCounter<Cat>(cat);
+
             Console.WriteLine("\nОдно мяуканье:");
-            cat.Meow();
+            counter.Meow(); // Используем счетчик вместо прямого вызова
 
             Console.Write("\nСколько раз кот должен мяукнуть? ");
-            string countInput = Console.ReadLine();
-            bool isValidCount = int.TryParse(countInput, out int count);
+            try
+            {
+                int count = int.Parse(Console.ReadLine());
 
-            if (!isValidCount || count <= 0)
-            {
-                Console.WriteLine("Неверное количество. Используем значение по умолчанию (3):");
-                cat.Meow(3);
+                if (count <= 0)
+                {
+                    Console.WriteLine("Неверное количество. Используем значение по умолчанию (3):");
+                    for (int i = 0; i < 3; i++)
+                    {
+                        counter.Meow();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"\n{count} мяуканий:");
+                    for (int i = 0; i < count; i++)
+                    {
+                        counter.Meow();
+                    }
+                }
             }
-            else
+            catch (FormatException)
             {
-                Console.WriteLine($"\n{count} мяуканий:");
-                cat.Meow(count);
+                Console.WriteLine("Неверный формат числа. Используем значение по умолчанию (3):");
+                for (int i = 0; i < 3; i++)
+                {
+                    counter.Meow();
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+
+            return counter;
         }
 
         /// <summary>
@@ -189,16 +224,29 @@ namespace Laba6
         {
             Console.WriteLine("\n--- ЗАДАНИЕ 1.2: КОЛЛЕКЦИЯ КОТОВ ---");
             Console.Write("Сколько котов создать? ");
-            string countInput = Console.ReadLine();
-            bool isValidCount = int.TryParse(countInput, out int count);
+            int count;
 
-            if (!isValidCount || count <= 0)
+            try
             {
-                Console.WriteLine("Неверное количество. Создадим 2 котов.");
+                count = int.Parse(Console.ReadLine());
+                if (count <= 0)
+                {
+                    Console.WriteLine("Неверное количество. Создадим 2 котов.");
+                    count = 2;
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Неверный формат числа. Создадим 2 котов.");
+                count = 2;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка ввода. Создадим 2 котов.");
                 count = 2;
             }
 
-            List<Cat> cats = new List<Cat>();
+            List<IMeowable> catsWithCounters = new List<IMeowable>();
             int createdCats = 0;
             int attempts = 0;
 
@@ -211,7 +259,8 @@ namespace Laba6
                 try
                 {
                     Cat newCat = new Cat(name);
-                    cats.Add(newCat);
+                    MeowCounter<Cat> counter = new MeowCounter<Cat>(newCat);
+                    catsWithCounters.Add(counter);
                     createdCats = createdCats + 1;
                 }
                 catch (Exception ex)
@@ -221,25 +270,35 @@ namespace Laba6
             }
 
             Console.WriteLine("\nМяуканье всех котов:");
-            MeowHelper.MeowAll(cats);
+            MeowHelper.MeowAll(catsWithCounters);
         }
 
         /// <summary>
         /// Запускает задание 3: подсчет мяуканий.
         /// </summary>
-        public static void RunTask3()
+        /// <param name="existingCatCounter">Счетчик уже существующего кота из предыдущих заданий</param>
+        public static void RunTask3(MeowCounter<Cat> existingCatCounter)
         {
             Console.WriteLine("\n--- ЗАДАНИЕ 1.3: ПОДСЧЕТ МЯУКАНИЙ ---");
-            Console.Write("Введите имя кота: ");
-            string name = Console.ReadLine();
 
-            Cat cat = new Cat(name);
-            MeowCounter<Cat> counter = new MeowCounter<Cat>(cat);
+            if (existingCatCounter == null)
+            {
+                Console.WriteLine("Нет созданного кота. Сначала создайте кота в задании 1.");
+                Console.Write("Введите имя для нового кота: ");
+                string name = Console.ReadLine();
+                Cat cat = new Cat(name);
+                existingCatCounter = new MeowCounter<Cat>(cat);
+            }
 
-            Console.WriteLine("\nКот мяукает 5 раз:");
-            MeowHelper.MeowFiveTimes(counter);
+            // Используем свойство OriginalObject для получения имени кота
+            Console.WriteLine($"Кот {existingCatCounter.OriginalObject.Name} мяукал {existingCatCounter.CallCount} раз");
 
-            Console.WriteLine($"\nКот {cat.Name} мяукал {counter.CallCount} раз");
+            // Добавим еще несколько мяуканий для демонстрации
+            Console.WriteLine("\nДобавим еще 2 мяуканья для демонстрации:");
+            existingCatCounter.Meow();
+            existingCatCounter.Meow();
+
+            Console.WriteLine($"\nТеперь кот мяукал {existingCatCounter.CallCount} раз");
         }
     }
 }
