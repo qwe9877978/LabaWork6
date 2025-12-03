@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CombinedProject</name>
+    </assembly>
+    <members>
+        <member name="T:CombinedProject.IMeowable">
+            <summary>
+            Интерфейс для объектов, которые могут мяукать.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.IMeowable.Meow">
+            <summary>
+            Вызывает мяуканье объекта.
+            </summary>
+        </member>
+        <member name="T:CombinedProject.Cat">
+            <summary>
+            Класс, представляющий кота.
+            </summary>
+        </member>
+        <member name="P:CombinedProject.Cat.Name">
+            <summary>
+            Имя кота.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.Cat.#ctor(System.String)">
+            <summary>
+            Создает экземпляр кота с указанным именем.
+            </summary>
+            <param name="name">Имя кота</param>
+            <exception cref="T:System.ArgumentException">Если имя пустое или содержит только пробелы.</exception>
+        </member>
+        <member name="M:CombinedProject.Cat.Meow">
+            <inheritdoc/>
+        </member>
+        <member name="M:CombinedProject.Cat.Meow(System.Int32)">
+            <summary>
+            Выводит на экран "Имя: мяу-мяу-...-мяу!" N раз.
+            </summary>
+            <param name="n">Количество повторений, должно быть больше 0.</param>
+            <exception cref="T:System.ArgumentException">Если n &lt;= 0.</exception>
+        </member>
+        <member name="T:CombinedProject.MeowCounter`1">
+            <summary>
+            Обертка для подсчета количества вызовов метода Meow.
+            </summary>
+            <typeparam name="T">Тип объекта, реализующего IMeowable</typeparam>
+        </member>
+        <member name="P:CombinedProject.MeowCounter`1.CallCount">
+            <summary>
+            Количество вызовов метода Meow.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.MeowCounter`1.#ctor(`0)">
+            <summary>
+            Создает обертку для подсчета вызовов.
+            </summary>
+            <param name="meowable">Объект для отслеживания</param>
+        </member>
+        <member name="M:CombinedProject.MeowCounter`1.Meow">
+            <inheritdoc/>
+        </member>
+        <member name="T:CombinedProject.MeowHelper">
+            <summary>
+            Вспомогательные методы для работы с мяукающими объектами.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.MeowHelper.MeowAll(System.Collections.Generic.IEnumerable{CombinedProject.IMeowable})">
+            <summary>
+            Вызывает метод Meow для всех объектов в коллекции.
+            </summary>
+            <param name="meowables">Коллекция мяукающих объектов</param>
+            <exception cref="T:System.ArgumentNullException">Если коллекция null</exception>
+        </member>
+        <member name="M:CombinedProject.MeowHelper.MeowFiveTimes(CombinedProject.IMeowable)">
+            <summary>
+            Вызывает метод Meow у объекта 5 раз.
+            </summary>
+            <param name="meowable">Объект для мяуканья</param>
+            <exception cref="T:System.ArgumentNullException">Если объект null</exception>
+        </member>
+        <member name="T:CombinedProject.CatTasks">
+            <summary>
+            Класс для запуска заданий, связанных с котами.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.CatTasks.RunTask1">
+            <summary>
+            Запускает задание 1: создание кота и мяуканье.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.CatTasks.RunTask2">
+            <summary>
+            Запускает задание 2: коллекция котов.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.CatTasks.RunTask3">
+            <summary>
+            Запускает задание 3: подсчет мяуканий.
+            </summary>
+        </member>
+        <member name="T:CombinedProject.Fraction">
+            <summary>
+            Представляет дробь с целочисленным числителем и знаменателем.
+            </summary>
+        </member>
+        <member name="P:CombinedProject.Fraction.Numerator">
+            <summary>
+            Числитель дроби.
+            </summary>
+        </member>
+        <member name="P:CombinedProject.Fraction.Denominator">
+            <summary>
+            Знаменатель дроби.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.Fraction.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Создает дробь с указанным числителем и знаменателем.
+            </summary>
+            <param name="numerator">Числитель дроби</param>
+            <param name="denominator">Знаменатель дроби (должен быть ненулевым)</param>
+            <exception cref="T:System.ArgumentException">Если знаменатель равен нулю</exception>
+        </member>
+        <member name="M:CombinedProject.Fraction.ToString">
+            <summary>
+            Возвращает строковое представление дроби в формате "числитель/знаменатель".
+            </summary>
+            <returns>Строка вида "числитель/знаменатель"</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Add(CombinedProject.Fraction)">
+            <summary>
+            Складывает текущую дробь с другой дробью.
+            </summary>
+            <param name="other">Дробь для сложения</param>
+            <returns>Новая дробь - результат сложения</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Add(System.Int32)">
+            <summary>
+            Складывает текущую дробь с целым числом.
+            </summary>
+            <param name="value">Целое число для сложения</param>
+            <returns>Новая дробь - результат сложения</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Subtract(CombinedProject.Fraction)">
+            <summary>
+            Вычитает из текущей дроби другую дробь.
+            </summary>
+            <param name="other">Дробь для вычитания</param>
+            <returns>Новая дробь - результат вычитания</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Multiply(CombinedProject.Fraction)">
+            <summary>
+            Умножает текущую дробь на другую дробь.
+            </summary>
+            <param name="other">Дробь для умножения</param>
+            <returns>Новая дробь - результат умножения</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Divide(CombinedProject.Fraction)">
+            <summary>
+            Делит текущую дробь на другую дробь.
+            </summary>
+            <param name="other">Дробь для деления</param>
+            <returns>Новая дробь - результат деления</returns>
+            <exception cref="T:System.ArgumentException">Если делитель равен нулю</exception>
+        </member>
+        <member name="M:CombinedProject.Fraction.Equals(System.Object)">
+            <summary>
+            Сравнивает текущую дробь с другой дробью.
+            </summary>
+            <param name="obj">Объект для сравнения</param>
+            <returns>True, если дроби равны, иначе False</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.GetHashCode">
+            <summary>
+            Возвращает хеш-код для дроби.
+            </summary>
+            <returns>Хеш-код дроби</returns>
+        </member>
+        <member name="M:CombinedProject.Fraction.Clone">
+            <summary>
+            Клонирует текущую дробь.
+            </summary>
+            <returns>Новая копия дроби</returns>
+        </member>
+        <member name="T:CombinedProject.ICachedDouble">
+            <summary>
+            Интерфейс для кэширования вещественного значения дроби.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.ICachedDouble.GetCachedValue">
+            <summary>
+            Получает кэшированное вещественное значение дроби.
+            </summary>
+            <returns>Вещественное значение дроби</returns>
+        </member>
+        <member name="T:CombinedProject.CachedFraction`1">
+            <summary>
+            Обобщенная версия дроби с кэшированием вещественного значения.
+            </summary>
+            <typeparam name="T">Тип дроби, должен наследоваться от Fraction</typeparam>
+        </member>
+        <member name="M:CombinedProject.CachedFraction`1.#ctor(`0)">
+            <summary>
+            Создает кэширующую дробь на основе существующей дроби.
+            </summary>
+            <param name="fraction">Исходная дробь</param>
+        </member>
+        <member name="M:CombinedProject.CachedFraction`1.GetCachedValue">
+            <inheritdoc/>
+        </member>
+        <member name="T:CombinedProject.FractionTasks">
+            <summary>
+            Класс для запуска заданий, связанных с дробями.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.FractionTasks.RunTask1">
+            <summary>
+            Запускает задание 1: операции с дробями.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.FractionTasks.RunTask2">
+            <summary>
+            Запускает задание 2: сравнение дробей.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.FractionTasks.RunTask3">
+            <summary>
+            Запускает задание 3: клонирование дробей.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.FractionTasks.RunTask4">
+            <summary>
+            Запускает задание 4: кэширование вещественного значения.
+            </summary>
+        </member>
+        <member name="T:CombinedProject.Program">
+            <summary>
+            Основной класс программы с меню выбора заданий.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.Program.Main(System.String[])">
+            <summary>
+            Точка входа в программу.
+            </summary>
+            <param name="args">Аргументы командной строки</param>
+        </member>
+        <member name="M:CombinedProject.Program.RunCatsMenu">
+            <summary>
+            Запускает меню для работы с котами.
+            </summary>
+        </member>
+        <member name="M:CombinedProject.Program.RunFractionsMenu">
+            <summary>
+            Запускает меню для работы с дробями.
+            </summary>
+        </member>
+    </members>
+</doc>
